@@ -1,0 +1,218 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct linklist {
+    int data;
+    struct linklist *next;
+};
+struct linklist *start = NULL;
+
+void insert();
+void display();
+void del();
+void edit();
+void count();
+void sort();
+void reverse();
+void atbeg();
+void atend();
+void before();
+void after();
+void atpos();
+
+int main() {
+    int ch1;
+    char choice1 = 'y';
+    system("cls");
+    do {
+        printf("\n LINKED LIST PROJECT \n");
+        printf("\n 1. INSERT");
+        printf("\n 2. DISPLAY");
+        printf("\n 3. DELETE");
+        printf("\n 4. EDIT");
+        printf("\n 5. COUNT NODES");
+        printf("\n 6. SORTING");
+        printf("\n 7. REVERSE");
+        printf("\n 8. EXIT");
+        printf("\n\n Enter Your Choice = ");
+        scanf("%d", &ch1);
+        switch (ch1) {
+            case 1:
+                insert();
+                break;
+            case 2:
+                display();
+                break;
+            case 3:
+                del();
+                break;
+            case 4:
+                edit();
+                break;
+            case 5:
+                count();
+                break;
+            case 6:
+                sort();
+                break;
+            case 7:
+                reverse();
+                break;
+            case 8:
+                choice1 = 'n';
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice1 == 'y');
+    return 0;
+}
+
+void insert() {
+    int ch2;
+    char choice2 = 'y';
+    do {
+        printf("\n 1. ATBEG");
+        printf("\n 2. ATEND");
+        printf("\n 3. BEFORE");
+        printf("\n 4. AFTER");
+        printf("\n 5. AT POSITION");
+        printf("\n 6. EXIT");
+        printf("\n\n Enter Your Choice = ");
+        scanf("%d", &ch2);
+        switch (ch2) {
+            case 1:
+                atbeg();
+                break;
+            case 2:
+                atend();
+                break;
+            case 3:
+                before();
+                break;
+            case 4:
+                after();
+                break;
+            case 5:
+                atpos();
+                break;
+            case 6:
+                choice2 = 'n';
+                break;
+            default:
+                printf("INVALID CHOICE\n");
+        }
+    } while (choice2 == 'y');
+}
+
+void atbeg() {
+    struct linklist *newNode = (struct linklist*)malloc(sizeof(struct linklist));
+    printf("Enter data: ");
+    scanf("%d", &newNode->data);
+    newNode->next = start;
+    start = newNode;
+}
+
+void atend() {
+    struct linklist *newNode = (struct linklist*)malloc(sizeof(struct linklist));
+    printf("Enter data: ");
+    scanf("%d", &newNode->data);
+    newNode->next = NULL;
+    if (start == NULL) {
+        start = newNode;
+    } else {
+        struct linklist *temp = start;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+void display() {
+    struct linklist *temp = start;
+    if (temp == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    printf("Linked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+void del() {
+    int key;
+    printf("Enter value to delete: ");
+    scanf("%d", &key);
+    struct linklist *temp = start, *prev = NULL;
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (temp == NULL) {
+        printf("Element not found\n");
+        return;
+    }
+    if (prev == NULL) {
+        start = temp->next;
+    } else {
+        prev->next = temp->next;
+    }
+    free(temp);
+}
+
+void count() {
+    int cnt = 0;
+    struct linklist *temp = start;
+    while (temp != NULL) {
+        cnt++;
+        temp = temp->next;
+    }
+    printf("Total nodes: %d\n", cnt);
+}
+
+void sort() {
+    struct linklist *i, *j;
+    int temp;
+    for (i = start; i != NULL; i = i->next) {
+        for (j = i->next; j != NULL; j = j->next) {
+            if (i->data > j->data) {
+                temp = i->data;
+                i->data = j->data;
+                j->data = temp;
+            }
+        }
+    }
+}
+
+void reverse() {
+    struct linklist *prev = NULL, *current = start, *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    start = prev;
+}
+
+void edit() {
+    int oldVal, newVal;
+    printf("Enter old value to edit: ");
+    scanf("%d", &oldVal);
+    struct linklist *temp = start;
+    while (temp != NULL) {
+        if (temp->data == oldVal) {
+            printf("Enter new value: ");
+            scanf("%d", &newVal);
+            temp->data = newVal;
+            return;
+        }
+        temp = temp->next;
+    }
+    printf("Element not found\n");
+}
+
